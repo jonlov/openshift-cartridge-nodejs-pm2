@@ -3,9 +3,9 @@ Name: nodejs-pm2
 Cartridge-Short-Name: NODEJS
 Display-Name: Node.js 0.10 with PM2
 Description: Custom Node.js 0.10 cartridge supervised by PM2
-Version: '0.12'
+Version: '0.10'
 Versions:
-- '0.12'
+- '0.10'
 - '0.6'
 License: MIT License
 Source-Url: https://gitlab.com/jlovera/openshift-cartridge-nodejs-pm2.git
@@ -22,7 +22,7 @@ Categories:
 Help-Topics:
   Developer Center: https://www.openshift.com/developers
 Provides:
-- nodejs-0.12
+- nodejs-0.10
 - nodejs
 - pm2
 Scaling:
