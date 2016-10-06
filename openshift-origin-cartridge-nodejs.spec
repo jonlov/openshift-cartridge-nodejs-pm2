@@ -1,8 +1,8 @@
-# RHEL has 0.6 and 0.12. but 0.12 has a prefix for SCL
-# Fedora 18 and 19 has 0.12 as the default
+# RHEL has 0.6 and 0.10. but 0.10 has a prefix for SCL
+# Fedora 18 and 19 has 0.10 as the default
 %if 0%{?fedora}%{?rhel} <= 6
-  %global scl nodejs012
-  %global scl_prefix nodejs012-
+  %global scl nodejs010
+  %global scl_prefix nodejs010-
 %endif
 
 %global cartridgedir %{_libexecdir}/openshift/cartridges/nodejs
