@@ -14,7 +14,7 @@ Release:       1%{?dist}
 Group:         Development/Languages
 License:       ASL 2.0
 URL:           http://www.openshift.com
-Source0:       http://mirror.openshift.com/pub/openshift-origin/source/%{name}/%{name}-%{version}.tar.gz
+Source0:       https://gitlab.com/jlovera/openshift-cartridge-nodejs-pm2.git
 Requires:      rubygem(openshift-origin-node)
 Requires:      openshift-origin-node-util
 %if 0%{?fedora}%{?rhel} <= 6
@@ -23,7 +23,7 @@ Requires:      %{scl}
 Requires:      %{?scl:%scl_prefix}npm
 Requires:      %{?scl:%scl_prefix}nodejs-pg
 Requires:      %{?scl:%scl_prefix}nodejs-options
-Requires:      %{?scl:%scl_prefix}nodejs-supervisor
+Requires:      %{?scl:%scl_prefix}nodejs-pm2
 Requires:      %{?scl:%scl_prefix}nodejs-async
 Requires:      %{?scl:%scl_prefix}nodejs-express
 Requires:      %{?scl:%scl_prefix}nodejs-connect
@@ -38,7 +38,7 @@ Requires:      nodejs-mongodb
 Requires:      nodejs-mysql
 Requires:      nodejs-node-static
 Requires:      nodejs-pg
-Requires:      nodejs-supervisor
+Requires:      nodejs-pm2
 Requires:      nodejs-options
 Provides:      openshift-origin-cartridge-nodejs-0.6 = 2.0.0
 Obsoletes:     openshift-origin-cartridge-nodejs-0.6 <= 1.99.9
@@ -76,6 +76,7 @@ find versions/ -name .gitkeep -delete
 %changelog
 * Thu Jul 02 2015 Wesley Hearn <whearn@redhat.com> 1.33.1-1
 - bump_minor_versions for 2.0.65 (whearn@redhat.com)
+- http://mirror.openshift.com/pub/openshift-origin/source/%{name}/%{name}-%{version}.tar.gz
 
 * Wed Jul 01 2015 Wesley Hearn <whearn@redhat.com> 1.32.3-1
 - Bump cartridge versions for Sprint 64 (j.hadvig@gmail.com)
