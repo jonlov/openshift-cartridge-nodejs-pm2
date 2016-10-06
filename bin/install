@@ -21,6 +21,9 @@ mkdir "$OPENSHIFT_HOMEDIR"/.node-gyp
 chown `id -u $OPENSHIFT_GEAR_UUID` -R "$OPENSHIFT_HOMEDIR"/.npmrc "$OPENSHIFT_HOMEDIR"/.node-gyp
 nodejs_context "npm config set tmp $OPENSHIFT_TMP_DIR"
 
+npm install -g pm2
+npm install -g supervisor
+
 # Prepare the PM2 home if needed
 if [ ! -L "$PM2_HOME/logs" ]; then
 	mkdir -p "$PM2_HOME"
