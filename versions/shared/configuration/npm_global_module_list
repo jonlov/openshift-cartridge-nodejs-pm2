@@ -22,5 +22,6 @@ mime
 mkdirp
 node-static
 qs
-supervisor
+# supervisor
+pm2
 traverse

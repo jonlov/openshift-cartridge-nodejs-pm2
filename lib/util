@@ -99,50 +99,50 @@ function use_npm() {
   [ -f ${OPENSHIFT_REPO_DIR}.openshift/markers/use_npm ]
 }
 
-# This is the full path for supervisor in its SCL context
-function supervisor_bin() {
-  nodejs_context "which supervisor"
+# This is the full path for pm2 in its SCL context
+function pm2_bin() {
+  nodejs_context "which pm2"
 }
 
 function node_bin() {
   nodejs_context "which node"
 }
 
-# All PIDs running node (including supervisor)
+# All PIDs running node (including pm2)
 # Need to combine double slashes in case our PATH contains them
 #
 function node_pids() {
   ps -u $(id -u) -o pid= -o cmd= | grep -e '[0-9]\{1,\}\snode\s' | sed -e 's#//#/#g'
 }
 
-# Only PIDs with node running supervisor
+# Only PIDs with node running pm2
 #
-function supervisor_pid() {
+function pm2_pid() {
   pids=$(node_pids)
-  sup_exe=$(supervisor_bin)
+  sup_exe=$(pm2_bin)
   echo "${pids}" | awk "/${sup_exe//\//\/}/ {print \$1}"
 }
 
-# Only node PIDs without supervisor
+# Only node PIDs without pm2
 #
 function node_pid() {
   pids=$(node_pids)
-  sup_exe=$(supervisor_bin)
+  sup_exe=$(pm2_bin)
   echo "${pids}" | awk "!/${sup_exe//\//\/}/ {print \$1}"
 }
 
-# If supervisor_pid is empty then assume cartridge is running using npm enabled
+# If pm2_pid is empty then assume cartridge is running using npm enabled
 #
 function cartridge_pid() {
-  if [ -z "$(supervisor_pid)" ]; then
+  if [ -z "$(pm2_pid)" ]; then
     node_pid
   else
-    supervisor_pid
+    pm2_pid
   fi
 }
 
 # check if the pidfile exists.
-# if it does not exist, look for the node or supervisor process 
+# if it does not exist, look for the node or pm2 process 
 # and recreate the pidfile if the process exists
 function cartridge_pidfile_exists() {
   if [ -f "$OPENSHIFT_NODEJS_PID_DIR/cartridge.pid" ]; then
@@ -166,31 +166,41 @@ function is_node_running() {
 
     node_command=$(ps --no-heading -ocmd -p $nodepid | sed -e 's#//#/#g')
 
-    # Ensure this is not a supervisor process
-    if [[ -n "$node_command" && ! "${node_command}" =~ $(supervisor_bin) ]]; then
+    # Ensure this is not a pm2 process
+    if [[ -n "$node_command" && ! "${node_command}" =~ $(pm2_bin) ]]; then
        return 0
     fi
 
     return 1
 }
 
-function is_supervisor_running() {
-    cartridge_pidfile_exists || return 1
+function is_pm2_running() {
+    # cartridge_pidfile_exists || return 1
 
-    nodepid=$(cat "${OPENSHIFT_NODEJS_PID_DIR}/cartridge.pid")
-    [ -n "$nodepid" ]  ||  return 1
-
-    #  Is the pid a supervisor process.
-    if [[ $(ps --no-heading -ocmd -p $nodepid | sed -e 's#//#/#g') =~ $(supervisor_bin) ]]; then
-       #  Yes, the app server is a supervisor process.
-       return 0
+    nodepid=$(cat "${PM2_HOME}/pm2.pid")
+    if [ -n "$nodepid" ]; then
+      return 1
+    else
+      return 0
     fi
 
+    # #  Is the pid a pm2 process.
+    # if [[ $(ps --no-heading -ocmd -p $nodepid | sed -e 's#//#/#g') =~ $(pm2_bin) ]]; then
+    #    #  Yes, the app server is a pm2 process.
+    #    return 0
+    # fi
+}
+
+function is_silent() {
+  if [ -f "${OPENSHIFT_REPO_DIR}.openshift/markers/SILENT" ]; then
     return 1
+  else
+    return 0
+  fi
 }
 
 function is_cartridge_running() {
-  is_supervisor_running || is_node_running
+  is_pm2_running || is_node_running
 }
 
 function print_missing_package_json_warning() {

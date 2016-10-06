@@ -1,10 +1,8 @@
 ---
-Name: nodejs
+Name: nodejs-pm2
 Cartridge-Short-Name: NODEJS
-Display-Name: Node.js 0.10
-Description: Node.js is a platform built on Chrome's JavaScript runtime for easily
-  building fast, scalable network applications. Node.js is perfect for data-intensive
-  real-time applications that run across distributed devices.
+Display-Name: Node.js 0.10 with PM2
+Description: Custom Node.js 0.10 cartridge supervised by PM2
 Version: '0.10'
 Versions:
 - '0.10'
@@ -26,6 +24,7 @@ Help-Topics:
 Provides:
 - nodejs-0.10
 - nodejs
+- pm2
 Scaling:
   Min: 1
   Max: -1
