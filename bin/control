@@ -208,6 +208,8 @@ function build() {
     fi
 
     echo "Building NodeJS cartridge"
+    update_pm2
+
     node_modules_dir="${OPENSHIFT_REPO_DIR}node_modules/"
     saved_modules_dir="${OPENSHIFT_NODEJS_DIR}/tmp/saved.node_modules"
 
