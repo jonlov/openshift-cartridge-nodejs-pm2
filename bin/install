@@ -10,6 +10,9 @@ case "$1" in
     version="$2"
 esac
 
+npm install -g pm2
+npm uninstall -g supervisor
+
 ## npm link
 link_global_modules $version
 
@@ -20,9 +23,6 @@ touch "$OPENSHIFT_HOMEDIR"/.npmrc
 mkdir "$OPENSHIFT_HOMEDIR"/.node-gyp
 chown `id -u $OPENSHIFT_GEAR_UUID` -R "$OPENSHIFT_HOMEDIR"/.npmrc "$OPENSHIFT_HOMEDIR"/.node-gyp
 nodejs_context "npm config set tmp $OPENSHIFT_TMP_DIR"
-
-npm install -g pm2
-npm uninstall -g supervisor
 
 # Prepare the PM2 home if needed
 if [ ! -L "$PM2_HOME/logs" ]; then
