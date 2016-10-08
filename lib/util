@@ -74,7 +74,7 @@ function update_npm {
   elif [ -f "${OPENSHIFT_REPO_DIR}.openshift/NPM_VERSION" ]; then
     local WANTED="$(cat "${OPENSHIFT_REPO_DIR}.openshift/NPM_VERSION")"
   else
-    local WANTED="2.5.1"
+    local WANTED="latest"
   fi
 
   local LATEST="$(remote_version npm "$WANTED")"
@@ -109,7 +109,7 @@ function update_pm2 {
   elif [ -f "${OPENSHIFT_REPO_DIR}.openshift/PM2_VERSION" ]; then
     local WANTED="$(cat "${OPENSHIFT_REPO_DIR}.openshift/PM2_VERSION")"
   else
-    local WANTED="2.0.18"
+    local WANTED="latest"
   fi
 
   local LATEST="$(remote_version pm2 "$WANTED")"
