@@ -33,17 +33,17 @@ function restart {
   start
 }
 
-function pre-repo-archive() {
-    rm -rf ${OPENSHIFT_NODEJS_DIR}tmp/{node_modules,node_modules}
+# function pre-repo-archive() {
+#     rm -rf ${OPENSHIFT_NODEJS_DIR}tmp/{node_modules,node_modules}
 
-    # If the node_modules/ directory exists, then "stash" it away for redeploy.
-    node_modules_dir="${OPENSHIFT_REPO_DIR}node_modules"
-    if [ -d "$node_modules_dir" ]; then
-      echo 'Saving away previously installed Node modules'
-      mv "$node_modules_dir" "${OPENSHIFT_NODEJS_DIR}tmp/node_modules"
-      mkdir -p "$node_modules_dir"
-    fi
-}
+#     # If the node_modules/ directory exists, then "stash" it away for redeploy.
+#     node_modules_dir="${OPENSHIFT_REPO_DIR}node_modules"
+#     if [ -d "$node_modules_dir" ]; then
+#       echo 'Saving away previously installed Node modules'
+#       mv "$node_modules_dir" "${OPENSHIFT_NODEJS_DIR}tmp/node_modules"
+#       mkdir -p "$node_modules_dir"
+#     fi
+# }
 
 function build() {
   echo "Building NodeJS cartridge"
@@ -69,9 +69,16 @@ function build() {
   else
     silent=""
   fi
+  
+  # Workaround for failure in npm install when a package in package.json
+  # points to a git commit.
+  # This issue occurs because we are running in the context of a
+  # git post receive-hook
+  unset GIT_DIR
+  unset GIT_WORK_TREE
 
   if [ -f "${OPENSHIFT_REPO_DIR}"/package.json ]; then
-      (cd "${OPENSHIFT_REPO_DIR}"; npm install -d "$silent")
+      (cd "${OPENSHIFT_REPO_DIR}"; nodejs_context "npm install -d '$silent'")
   fi
   # reload
 }
